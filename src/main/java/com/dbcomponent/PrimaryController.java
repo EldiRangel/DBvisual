@@ -19,10 +19,26 @@ public class PrimaryController {
     }
 
     private void initComponent() throws Exception {
-        IAdapter adapter = dbSelector.getValue().equals("PostgreSQL") ? new PostgresAdapter() : new MySQLAdapter();
-        //Pon aquí el nombre de la base de datos y la contraseña luis
-        db = new DbComponent(adapter, "jdbc:postgresql://localhost:5432/pool_conexiones?sslmode=disable", 
-                             "postgres", "123456789", 5, "queries.properties");
+        IAdapter adapter;
+        String url;
+        String user;
+        String pass;
+
+        String seleccion = dbSelector.getValue();
+
+        if ("PostgreSQL".equals(seleccion)) {
+            adapter = new PostgresAdapter();
+            url = "jdbc:postgresql://localhost:5432/pool_conexiones?sslmode=disable";
+            user = "postgres";
+            pass = "123456789";
+        } else {
+            adapter = new MySQLAdapter();
+            url = "jdbc:mysql://localhost:3306/pool_conexiones";
+            user = "root";
+            pass = "";
+        }
+
+        db = new DbComponent(adapter, url, user, pass, 5, "queries.properties");
     }
 
     @FXML
@@ -42,7 +58,7 @@ public class PrimaryController {
             initComponent();
             db.transaction(conn -> {
                 logArea.appendText("Iniciando Transacción...\n");
-                try (PreparedStatement st = conn.prepareStatement("INSERT INTO prueba (nombre) VALUES ('TX JavaFX')")) {
+                try (PreparedStatement st = conn.prepareStatement("INSERT INTO alumnos (nombre) VALUES ('TX JavaFX')")) {
                     st.executeUpdate();
                 }
                 // Si pones un error intencional aquí, verás cómo hace Rollback automáticamente
