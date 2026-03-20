@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbcomponent.PrimaryController" style="-fx-background-color: #2b2b2b;">
+    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+
+    <Label text="Componente Desacoplado de Base de Datos" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Adapter Seleccionado:" style="-fx-text-fill: #aaa;"/>
+        <ComboBox fx:id="dbSelector" prefWidth="150" />
+    </HBox>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Probar Query" onAction="#handleQuery" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;"/>
+        <Button text="Probar Transacción" onAction="#handleTransaction" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-cursor: hand;"/>
+    </HBox>
+
+    <TextArea fx:id="logArea" prefHeight="200" editable="false" style="-fx-control-inner-background: #1e1e1e; -fx-text-fill: #00FF00; -fx-font-family: 'Consolas';"/>
+</VBox>
