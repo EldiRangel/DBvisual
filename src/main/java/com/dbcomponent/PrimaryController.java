@@ -1,71 +1,63 @@
 package com.dbcomponent;
 
-import com.dbcomponent.adapter.*;
+import com.dbcomponent.adapter.IAdapter;
+import com.dbcomponent.adapter.MySQLAdapter;
+import com.dbcomponent.adapter.PostgresAdapter;
 import com.dbcomponent.core.DbComponent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import java.sql.PreparedStatement;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 
 public class PrimaryController {
-    @FXML private ComboBox<String> dbSelector;
+    @FXML private ComboBox<String> adapterCombo;
     @FXML private TextArea logArea;
     private DbComponent db;
 
     @FXML
     public void initialize() {
-        dbSelector.getItems().addAll("PostgreSQL", "MySQL");
-        dbSelector.getSelectionModel().selectFirst();
-        logArea.appendText("Sistema Listo. Desacoplamiento Activo.\n");
+        adapterCombo.getItems().addAll("PostgreSQL", "MySQL");
+        adapterCombo.getSelectionModel().selectFirst();
     }
 
-    private void initComponent() throws Exception {
+    private void initDB() throws Exception {
         IAdapter adapter;
-        String url;
-        String user;
-        String pass;
+        String url, user, pass;
 
-        String seleccion = dbSelector.getValue();
-
-        if ("PostgreSQL".equals(seleccion)) {
+        if (adapterCombo.getValue().equals("PostgreSQL")) {
             adapter = new PostgresAdapter();
-            url = "jdbc:postgresql://localhost:5432/pool_conexiones?sslmode=disable";
-            user = "postgres";
-            pass = "123456789";
+            url = "jdbc:postgresql://localhost:5432/tu_base"; // Cambia esto
+            user = "postgres"; pass = "tu_clave";
         } else {
             adapter = new MySQLAdapter();
-            url = "jdbc:mysql://localhost:3306/pool_conexiones";
-            user = "root";
-            pass = "";
+            url = "jdbc:mysql://localhost:3306/tu_base"; // Cambia esto
+            user = "root"; pass = "tu_clave";
         }
 
-        db = new DbComponent(adapter, url, user, pass, 5, "queries.properties");
+       // Puede ser queries.json, queries.yaml.
+        db = new DbComponent(adapter, url, user, pass, 5, "queries.json"); 
     }
 
+ 
     @FXML
-    private void handleQuery() {
+    private void handleQuery() { 
         try {
-            initComponent();
-            db.query("insertar_prueba", "Alumno " + System.currentTimeMillis());
-            logArea.appendText(" Query Inserción exitosa usando " + dbSelector.getValue() + "\n");
+            initDB();
+            db.query("insert_test", "Prueba Query Normal");
+            logArea.appendText("Query Normal Exitosa.\n");
         } catch (Exception e) {
-            logArea.appendText(" [Error Query] " + e.getMessage() + "\n");
+            logArea.appendText("Error Query: " + e.getMessage() + "\n");
         }
     }
 
+    
     @FXML
     private void handleTransaction() {
         try {
-            initComponent();
-            db.transaction(conn -> {
-                logArea.appendText("Iniciando Transacción...\n");
-                try (PreparedStatement st = conn.prepareStatement("INSERT INTO alumnos (nombre) VALUES ('TX JavaFX')")) {
-                    st.executeUpdate();
-                }
-                // Si pones un error intencional aquí, verás cómo hace Rollback automáticamente
-            });
-            logArea.appendText("Transacción Completada y guardada.\n");
+            initDB();
+            db.transaction("insert_test", "Prueba Transaccion");
+            logArea.appendText("Transacción Exitosa.\n");
         } catch (Exception e) {
-            logArea.appendText("No completada " + e.getMessage() + "\n");
+            logArea.appendText("Error Transacción: " + e.getMessage() + "\n");
         }
     }
 }

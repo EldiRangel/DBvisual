@@ -1,9 +1,9 @@
+com\dbcomponent\core\DbComponent$1.class
 com\dbcomponent\adapter\MySQLAdapter.class
 com\dbcomponent\Main.class
 com\dbcomponent\pool\CustomPool.class
 com\dbcomponent\PrimaryController.class
 com\dbcomponent\adapter\PostgresAdapter.class
-com\dbcomponent\core\DbComponent$TransactionAction.class
 com\dbcomponent\App.class
 com\dbcomponent\core\DbComponent.class
 module-info.class
