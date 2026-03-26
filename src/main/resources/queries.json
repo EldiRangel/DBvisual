@@ -1,0 +1,6 @@
+{
+  "insert_test": "INSERT INTO alumnos (nombre) VALUES (?)",
+  "insert_transaccion": "INSERT INTO alumnos (nombre) VALUES (?)",
+  "select_all": "SELECT * FROM alumnos",
+  "delete_test": "DELETE FROM alumnos WHERE nombre = ?"
+}
